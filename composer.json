@@ -1,0 +1,26 @@
+{
+    "name": "agentsib/crypto-bundle",
+    "description": "Symfony 2/3/4 bundle for encrypt data with openssl library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ilya Kovalenko",
+            "email": "agentsib@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "AgentSIB\\CryptoBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AgentSIB\\CryptoBundle\\Tests": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.4",
+        "ext-openssl": "*"
+    }
+}

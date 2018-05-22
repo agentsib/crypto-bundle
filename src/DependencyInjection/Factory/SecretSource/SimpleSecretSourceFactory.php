@@ -10,33 +10,31 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
-class RedisSecretSourceFactory implements SecretSourceFactoryInterface
+class SimpleSecretSourceFactory implements SecretSourceFactoryInterface
 {
     public function create(ContainerBuilder $container, $sourceName, $config = [])
     {
-        $client = $config['client'];
-        if (substr($client, 0, 1) == '@') {
-            $client = substr($client, 1);
-        }
+        $secretSourceDefinition = new DefinitionDecorator('agentsib_crypto.secret_source.prototype.simple');
+        $secretSourceDefinition->replaceArgument(0, $config);
 
-        $secretSourceDefinition = new DefinitionDecorator('');
+        $serviceId = 'agentsib_crypto.secret_source.'.$sourceName;
+        $container->setDefinition($serviceId, $secretSourceDefinition);
+
+        return $serviceId;
     }
-
 
     public function getName()
     {
-        return 'redis';
+        return 'simple';
     }
 
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder
             ->children()
-                ->arrayNode('redis')->info('Redis configuration')
-                    ->children()
-                        ->scalarNode('client')->cannotBeEmpty()->end()
-                        ->scalarNode('key')->cannotBeEmpty()->end()
-                    ->end()
+                ->scalarNode($this->getName())
+                    ->info('Simple string value')
+                    ->cannotBeEmpty()
                 ->end()
             ->end();
     }

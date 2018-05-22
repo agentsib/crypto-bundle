@@ -4,9 +4,34 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services
         http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="agentsib_crypto.secret_source.prototype.redis" abstract="true" public="false">
-            <argument><!-- RedisClient --></argument>
-            <argument><!-- Key name --></argument>
+        <service id="agentsib_crypto.secret_source.prototype.abstract" public="false" abstract="true">
+        </service>
+
+        <service id="agentsib_crypto.secret_source.prototype.simple"
+                 parent="agentsib_crypto.secret_source.prototype.abstract"
+                 class="AgentSIB\CryptoBundle\Model\SecretSource\SimpleSecretSource">
+            <argument><!-- Value --></argument>
+        </service>
+        <service
+                id="agentsib_crypto.secret_source.prototype.php_constant"
+                parent="agentsib_crypto.secret_source.prototype.abstract"
+                class="AgentSIB\CryptoBundle\Model\SecretSource\PhpConstantSecretSource">
+            <argument><!-- Constant name --></argument>
+        </service>
+        <service id="agentsib_crypto.secret_source.prototype.file_content"
+                 parent="agentsib_crypto.secret_source.prototype.abstract"
+                 class="AgentSIB\CryptoBundle\Model\SecretSource\FileContentSecretSource">
+            <argument><!-- File path --></argument>
+        </service>
+        <service id="agentsib_crypto.secret_source.prototype.environment"
+                 parent="agentsib_crypto.secret_source.prototype.abstract"
+                 class="AgentSIB\CryptoBundle\Model\SecretSource\EnvironmentSecretSource">
+            <argument><!-- Environment name --></argument>
+        </service>
+        <service id="agentsib_crypto.secret_source.prototype.chain_xor"
+                 parent="agentsib_crypto.secret_source.prototype.abstract"
+                 class="AgentSIB\CryptoBundle\Model\SecretSource\ChainXORSecretSource">
+            <argument><!-- Environment name --></argument>
         </service>
     </services>
 </container>

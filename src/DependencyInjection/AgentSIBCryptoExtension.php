@@ -56,7 +56,8 @@ class AgentSIBCryptoExtension extends Extension
             $factoryName = key($secretSourceConfig);
             $factory = $this->secretSourceFactories[$factoryName];
 
-            $factory->create($container, $secretSourceName, $secretSourceConfig[$factoryName]);
+            $serviceId = $factory->create($container, $secretSourceName, $secretSourceConfig[$factoryName]);
+            $container->findDefinition($serviceId)->addTag('agentsib_crypto.secret_source');
         }
     }
 

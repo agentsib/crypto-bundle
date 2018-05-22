@@ -7,7 +7,11 @@ namespace AgentSIB\CryptoBundle;
 
 
 use AgentSIB\CryptoBundle\DependencyInjection\AgentSIBCryptoExtension;
-use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\RedisSecretSourceFactory;
+use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\ChainXORSecretSourceFactory;
+use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\SimpleSecretSourceFactory;
+use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\EnvironmentSecretSourceFactory;
+use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\FileContentSecretSourceFactory;
+use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\PhpConstantSecretSourceFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -20,7 +24,11 @@ final class AgentSIBCryptoBundle extends Bundle
         /** @var AgentSIBCryptoExtension $extension */
         $extension = $this->getContainerExtension();
 
-        $extension->addSecretSourceFactory(new RedisSecretSourceFactory());
+        $extension->addSecretSourceFactory(new SimpleSecretSourceFactory());
+        $extension->addSecretSourceFactory(new PhpConstantSecretSourceFactory());
+        $extension->addSecretSourceFactory(new FileContentSecretSourceFactory());
+        $extension->addSecretSourceFactory(new EnvironmentSecretSourceFactory());
+        $extension->addSecretSourceFactory(new ChainXORSecretSourceFactory());
     }
 
     public function getContainerExtension()

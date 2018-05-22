@@ -4,34 +4,54 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services
         http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+
+        <service id="agentsib_crypto.crypto_service" class="AgentSIB\CryptoBundle\Service\CryptoService">
+            <argument type="string"><!-- Current version --></argument>
+            <tag name="monolog.logger" channel="agentsib_crypto" />
+        </service>
+
+
+        <!-- Ciphers -->
+        <service id="agentsib_crypto.ciphers.prototype.abstract" public="false" abstract="true">
+        </service>
+        <service
+                id="agentsib_crypto.ciphers.prototype.aes256openssl"
+                parent="agentsib_crypto.ciphers.prototype.abstract"
+                class="AgentSIB\CryptoBundle\Model\Cipher\AES256OpenSSLCipher"
+                abstract="true">
+            <argument><!-- Secret source --></argument>
+            <tag name="agentsib_crypto.cipher.prototype" alias="aes256openssl" />
+        </service>
+
+        <!-- Secret Sources -->
+
         <service id="agentsib_crypto.secret_source.prototype.abstract" public="false" abstract="true">
         </service>
 
         <service id="agentsib_crypto.secret_source.prototype.simple"
                  parent="agentsib_crypto.secret_source.prototype.abstract"
                  class="AgentSIB\CryptoBundle\Model\SecretSource\SimpleSecretSource">
-            <argument><!-- Value --></argument>
+            <argument type="string"><!-- Value --></argument>
         </service>
         <service
                 id="agentsib_crypto.secret_source.prototype.php_constant"
                 parent="agentsib_crypto.secret_source.prototype.abstract"
                 class="AgentSIB\CryptoBundle\Model\SecretSource\PhpConstantSecretSource">
-            <argument><!-- Constant name --></argument>
+            <argument type="string"><!-- Constant name --></argument>
         </service>
         <service id="agentsib_crypto.secret_source.prototype.file_content"
                  parent="agentsib_crypto.secret_source.prototype.abstract"
                  class="AgentSIB\CryptoBundle\Model\SecretSource\FileContentSecretSource">
-            <argument><!-- File path --></argument>
+            <argument type="string"><!-- File path --></argument>
         </service>
         <service id="agentsib_crypto.secret_source.prototype.environment"
                  parent="agentsib_crypto.secret_source.prototype.abstract"
                  class="AgentSIB\CryptoBundle\Model\SecretSource\EnvironmentSecretSource">
-            <argument><!-- Environment name --></argument>
+            <argument type="string"><!-- Environment name --></argument>
         </service>
         <service id="agentsib_crypto.secret_source.prototype.chain_xor"
                  parent="agentsib_crypto.secret_source.prototype.abstract"
                  class="AgentSIB\CryptoBundle\Model\SecretSource\ChainXORSecretSource">
-            <argument><!-- Environment name --></argument>
         </service>
     </services>
 </container>

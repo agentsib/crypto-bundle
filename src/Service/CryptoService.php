@@ -22,7 +22,7 @@ class CryptoService implements LoggerAwareInterface
 
     public function __construct($currentCipherVersion)
     {
-        $this->currentCipherVersion;
+        $this->currentCipherVersion = $currentCipherVersion;
     }
 
     public function setLogger(LoggerInterface $logger)

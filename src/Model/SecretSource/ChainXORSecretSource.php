@@ -37,7 +37,7 @@ class ChainXORSecretSource implements SecretSourceInterface
             }
         }
 
-        return hash('sha1', $secret, true);
+        return hash('sha256', $secret, true);
     }
 
     private function xorStrings($str, $key)

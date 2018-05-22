@@ -7,6 +7,7 @@ namespace AgentSIB\CryptoBundle;
 
 
 use AgentSIB\CryptoBundle\DependencyInjection\AgentSIBCryptoExtension;
+use AgentSIB\CryptoBundle\DependencyInjection\Compiler\CiphersPass;
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\ChainXORSecretSourceFactory;
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\SimpleSecretSourceFactory;
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\EnvironmentSecretSourceFactory;
@@ -29,6 +30,8 @@ final class AgentSIBCryptoBundle extends Bundle
         $extension->addSecretSourceFactory(new FileContentSecretSourceFactory());
         $extension->addSecretSourceFactory(new EnvironmentSecretSourceFactory());
         $extension->addSecretSourceFactory(new ChainXORSecretSourceFactory());
+
+        $container->addCompilerPass(new CiphersPass());
     }
 
     public function getContainerExtension()

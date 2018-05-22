@@ -21,7 +21,7 @@ class PhpConstantSecretSource implements SecretSourceInterface
     public function getSecret()
     {
         if (!defined($this->constantName)) {
-            throw new SecretSourceExtension(sprintf('Php constant %s not exists!', $this->constantName));
+            throw new SecretSourceExtension(sprintf('PHP constant %s not exists!', $this->constantName));
         }
 
         return constant($this->constantName);

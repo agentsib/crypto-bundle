@@ -13,6 +13,11 @@
             <tag name="monolog.logger" channel="agentsib_crypto" />
         </service>
 
+        <service id="agentsib_crypto.doctrine.subscriber" class="AgentSIB\CryptoBundle\Subscriber\DoctrineEncryptSubscriber">
+            <argument type="service" id="agentsib_crypto.crypto_service" />
+            <argument type="service" id="annotations.reader" />
+            <tag name="doctrine.event_subscriber" />
+        </service>
 
         <!-- Ciphers -->
         <service id="agentsib_crypto.ciphers.prototype.abstract" public="false" abstract="true">

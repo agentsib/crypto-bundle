@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource;
 
-
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -43,8 +42,12 @@ class ChainXORSecretSourceFactory implements SecretSourceFactoryInterface
                 ->end()
             ->end()
             ->validate()
-                ->always(function ($v) { if (is_array($v[$this->getName()]) && !count($v[$this->getName()])) unset($v[$this->getName()]); return $v;})
+                ->always(function ($v) {
+                    if (is_array($v[$this->getName()]) && !count($v[$this->getName()])) {
+                        unset($v[$this->getName()]);
+                    }
+                    return $v;
+                })
             ->end();
     }
-
 }

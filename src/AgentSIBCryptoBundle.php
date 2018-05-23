@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle;
 
-
 use AgentSIB\CryptoBundle\DependencyInjection\AgentSIBCryptoExtension;
 use AgentSIB\CryptoBundle\DependencyInjection\Compiler\CiphersPass;
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\ChainXORSecretSourceFactory;
@@ -43,6 +42,4 @@ final class AgentSIBCryptoBundle extends Bundle
 
         return $this->extension;
     }
-
-
 }

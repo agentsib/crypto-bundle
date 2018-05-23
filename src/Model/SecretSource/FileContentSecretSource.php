@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Model\SecretSource;
 
-
 use AgentSIB\CryptoBundle\Model\Exception\SecretSourceExtension;
 use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
@@ -30,5 +29,4 @@ class FileContentSecretSource implements SecretSourceInterface
 
         return file_get_contents($this->fileName);
     }
-
 }

@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Model\SecretSource;
 
-
 use AgentSIB\CryptoBundle\Model\Exception\SecretSourceExtension;
 use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
@@ -27,5 +26,4 @@ class EnvironmentSecretSource implements SecretSourceInterface
         }
         return $value;
     }
-
 }

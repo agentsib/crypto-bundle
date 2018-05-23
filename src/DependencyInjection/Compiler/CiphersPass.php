@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\DependencyInjection\Compiler;
 
-
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -25,5 +24,4 @@ class CiphersPass implements CompilerPassInterface
             $cryptoServiceDefinition->addMethodCall('addCipherForVersion', [$version, new Reference($serviceId)]);
         }
     }
-
 }

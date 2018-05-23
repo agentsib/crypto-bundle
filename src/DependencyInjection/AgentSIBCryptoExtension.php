@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\DependencyInjection;
 
-
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\SecretSourceFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -39,7 +38,6 @@ class AgentSIBCryptoExtension extends Extension
 
         $cryptoServiceDefinition = $container->getDefinition('agentsib_crypto.crypto_service');
         $cryptoServiceDefinition->replaceArgument(0, $config['current_cipher']);
-
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container)
@@ -100,15 +98,10 @@ class AgentSIBCryptoExtension extends Extension
 
             $container->setDefinition($cipherServiceId, $cipherDefinition);
         }
-
     }
 
     public function getAlias()
     {
         return 'agentsib_crypto';
     }
-
-
-
-
 }

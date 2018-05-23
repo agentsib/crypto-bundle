@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Model;
 
-
 interface CipherInterface
 {
     /**

@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Model\SecretSource;
 
-
 use AgentSIB\CryptoBundle\Model\Exception\SecretSourceExtension;
 use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
@@ -43,13 +42,12 @@ class ChainXORSecretSource implements SecretSourceInterface
     private function xorStrings($str, $key)
     {
         $result = '';
-        for($i=0; $i < strlen($str); ) {
-            for($j=0; ($j < strlen($key) && $i < strlen($str)); $j++,$i++) {
+        for ($i=0; $i < strlen($str);) {
+            for ($j=0; ($j < strlen($key) && $i < strlen($str)); $j++,$i++) {
                 $result .= $str{$i} ^ $key{$j};
             }
         }
 
         return $result;
     }
-
 }

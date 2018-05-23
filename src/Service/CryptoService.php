@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Service;
 
-
 use AgentSIB\CryptoBundle\Model\CipherInterface;
 use AgentSIB\CryptoBundle\Model\Exception\CryptoException;
 use Psr\Log\LoggerAwareInterface;
@@ -51,7 +50,6 @@ class CryptoService implements LoggerAwareInterface
             $encryptedString = base64_encode($currentCipher->encrypt($plainString));
 
             return $this->currentCipherVersion . '::' . $encryptedString;
-
         } catch (CryptoException $e) {
             if ($this->logger) {
                 $this->logger->critical(sprintf(
@@ -90,7 +88,6 @@ class CryptoService implements LoggerAwareInterface
             }
 
             return $currentCipher->decrypt($encryptedString);
-
         } catch (CryptoException $e) {
             if ($this->logger) {
                 $this->logger->critical(sprintf(

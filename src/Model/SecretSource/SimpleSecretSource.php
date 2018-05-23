@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Model\SecretSource;
 
-
 use AgentSIB\CryptoBundle\Model\Exception\SecretSourceExtension;
 use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
@@ -22,6 +21,4 @@ class SimpleSecretSource implements SecretSourceInterface
     {
         return $this->secret;
     }
-
-
 }

@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Model\Cipher;
 
-
 use AgentSIB\CryptoBundle\Model\Exception\DecryptException;
 use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
@@ -77,8 +76,5 @@ class AES256OpenSSLCipher extends AbstractCipher
             OPENSSL_RAW_DATA,
             $iv
         );
-
     }
-
-
 }

@@ -5,7 +5,6 @@
 
 namespace AgentSIB\CryptoBundle\Model;
 
-
 use AgentSIB\CryptoBundle\Model\Exception\SecretSourceExtension;
 
 interface SecretSourceInterface

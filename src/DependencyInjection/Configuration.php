@@ -10,7 +10,6 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-
 class Configuration implements ConfigurationInterface
 {
     /** @var SecretSourceFactoryInterface[] */
@@ -77,7 +76,7 @@ class Configuration implements ConfigurationInterface
                 ->isRequired()
                 ->example('v1, v2, v3')
                 ->validate()
-                    ->ifTrue(function($v){
+                    ->ifTrue(function ($v) {
                         return !preg_match('/^v[0-9]+$/', $v);
                     })
                     ->thenInvalid('Value of current_cipher cipher must has format "v[0-9]+"')
@@ -95,13 +94,16 @@ class Configuration implements ConfigurationInterface
 
         $secretSourcesPrototypeNode
             ->validate()
-                ->ifTrue(function ($v) { return count($v) > 1; })
+                ->ifTrue(function ($v) {
+                    return count($v) > 1;
+                })
                 ->thenInvalid('You must set only one secret source')
             ->end()
             ->validate()
-                ->ifTrue(function ($v) { return count($v) == 0; })
+                ->ifTrue(function ($v) {
+                    return count($v) == 0;
+                })
                 ->thenInvalid('At lease one secret source required')
             ->end();
     }
-
 }

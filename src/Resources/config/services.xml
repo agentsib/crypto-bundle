@@ -24,7 +24,7 @@
                 abstract="true"
                 public="false">
             <argument><!-- Secret source --></argument>
-            <tag name="agentsib_crypto.cipher.prototype" alias="aes256openssl" />
+            <tag name="agentsib_crypto.cipher.prototype" alias="aes256" />
         </service>
 
         <!-- Secret Sources -->

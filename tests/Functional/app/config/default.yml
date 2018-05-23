@@ -1,0 +1,4 @@
+framework:
+    secret: test
+services:
+    logger: { class: Psr\Log\NullLogger }

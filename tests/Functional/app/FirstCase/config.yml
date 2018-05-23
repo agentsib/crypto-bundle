@@ -1,0 +1,12 @@
+imports:
+    - { resource: '../config/default.yml'}
+
+agentsib_crypto:
+    secret_sources:
+        test:
+            simple: test123
+    ciphers:
+        v1:
+            cipher: aes256openssl
+            secret_source: test
+    current_cipher: v1

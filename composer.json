@@ -1,6 +1,7 @@
 {
     "name": "agentsib/crypto-bundle",
     "description": "Symfony 2/3/4 bundle for encrypt data with openssl library",
+    "keywords": ["encrypt", "decrypt", "doctrine", "aes256"],
     "type": "library",
     "license": "MIT",
     "authors": [

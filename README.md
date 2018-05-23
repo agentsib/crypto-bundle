@@ -1,3 +1,8 @@
+WARNING
+=======
+
+*Bundle is still in development.*
+
 Installation
 ============
 

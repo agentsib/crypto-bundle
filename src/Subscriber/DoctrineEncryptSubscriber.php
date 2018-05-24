@@ -10,9 +10,9 @@ use AgentSIB\CryptoBundle\Annotation\Encrypted;
 use AgentSIB\CryptoBundle\Model\Exception\CryptoException;
 use AgentSIB\CryptoBundle\Model\Exception\DecryptException;
 use AgentSIB\CryptoBundle\Service\CryptoService;
+use AgentSIB\CryptoBundle\Utils\ClassUtils;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -85,11 +85,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
 
     public function processFields($entity, $operation)
     {
-        if(strstr(get_class($entity), "Proxies")) {
-            $realClass = ClassUtils::getClass($entity);
-        } else {
-            $realClass = get_class($entity);
-        }
+        $realClass = ClassUtils::getEntityClass($entity);
 
         $reflectionClass = new \ReflectionClass($realClass);
         $properties = $this->getClassProperties($reflectionClass);
@@ -116,8 +112,8 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                 $refDecryptedProperty = $refProperty->getDeclaringClass()->getProperty($decryptedPropName);
                 $refEncryptedProperty = $refProperty;
 
-                $encryptedPropValue = $this->getPropertyValue($entity, $refEncryptedProperty);
-                $decryptedPropValue = $this->getPropertyValue($entity, $refDecryptedProperty);
+                $encryptedPropValue = ClassUtils::getPropertyValue($entity, $refEncryptedProperty);
+                $decryptedPropValue = ClassUtils::getPropertyValue($entity, $refDecryptedProperty);
 
                 switch ($operation) {
                     case self::OPERATION_ENCRYPT:
@@ -134,7 +130,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                             }
                         }
                         if ($currentValue === false) {
-                            $this->setPropertyValue($entity, $refEncryptedProperty, $currentValue);
+                            ClassUtils::setPropertyValue($entity, $refEncryptedProperty, $currentValue);
                         } else {
                             if ($currentValue != $decryptedPropValue) {
                                 if ($decryptedPropValue) {
@@ -145,7 +141,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                             }
                         }
 
-                        $this->setPropertyValue($entity, $refEncryptedProperty, $encryptedPropValue);
+                        ClassUtils::setPropertyValue($entity, $refEncryptedProperty, $encryptedPropValue);
                         break;
                     case self::OPERATION_DECRYPT:
                         try {
@@ -162,7 +158,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                                 throw $e;
                             }
                         }
-                        $this->setPropertyValue($entity, $refDecryptedProperty, $currentValue);
+                        ClassUtils::setPropertyValue($entity, $refDecryptedProperty, $currentValue);
                         break;
 
                 }
@@ -172,38 +168,9 @@ class DoctrineEncryptSubscriber implements EventSubscriber
 
     }
 
-    private function getPropertyValue($object, \ReflectionProperty $refProperty)
-    {
-        if ($refProperty->isPublic()) {
-            $value = $refProperty->getValue($object);
-        } else {
-            $refProperty->setAccessible(true);
-            $value = $refProperty->getValue($object);
-            $refProperty->setAccessible(false);
-        }
-
-        return $value;
-    }
-
-    private function setPropertyValue($object, \ReflectionProperty $refProperty, $value)
-    {
-        if ($refProperty->isPublic()) {
-            $refProperty->setValue($object, $value);
-        } else {
-            $refProperty->setAccessible(true);
-            $refProperty->setValue($object, $value);
-            $refProperty->setAccessible(false);
-        }
-
-    }
-
     private function handleEmbeddedAnnotation($entity, \ReflectionProperty $embeddedProperty, $operation)
     {
-        if(strstr(get_class($entity), "Proxies")) {
-            $realClass = ClassUtils::getClass($entity);
-        } else {
-            $realClass = get_class($entity);
-        }
+        $realClass = ClassUtils::getEntityClass($entity);
         $reflectionClass = new \ReflectionClass($realClass);
         $propName = $embeddedProperty->getName();
         $methodName = ucfirst($propName);

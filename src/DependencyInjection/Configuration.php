@@ -48,7 +48,6 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->performNoDeepMerging()
                     ->prototype('array')
-                        ->performNoDeepMerging()
                         ->children()
                             ->scalarNode('cipher')->isRequired()->end()
                             ->scalarNode('secret_source')->isRequired()->end()

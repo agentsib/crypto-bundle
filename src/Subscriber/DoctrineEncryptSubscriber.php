@@ -202,7 +202,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
         }
 
         if($parentClass = $reflectionClass->getParentClass()){
-            $parentPropertiesArray = $this->getClassProperties($parentClass->getName());
+            $parentPropertiesArray = $this->getClassProperties($parentClass);
             if(count($parentPropertiesArray) > 0)
                 $propertiesArray = array_merge($parentPropertiesArray, $propertiesArray);
         }

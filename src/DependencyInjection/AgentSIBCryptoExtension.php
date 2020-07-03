@@ -8,7 +8,7 @@ namespace AgentSIB\CryptoBundle\DependencyInjection;
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\SecretSourceFactoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Config\Resource\FileResource;
@@ -87,7 +87,7 @@ class AgentSIBCryptoExtension extends Extension
                 throw new \InvalidArgumentException(sprintf('Cipher "%s" not found', $cipherConfig['cipher']));
             }
 
-            $cipherDefinition = new DefinitionDecorator($ciphers[strtolower($cipherConfig['cipher'])]);
+            $cipherDefinition = new ChildDefinition($ciphers[strtolower($cipherConfig['cipher'])]);
             $cipherDefinition->replaceArgument(0, new Reference(sprintf('agentsib_crypto.secret_source.%s', $cipherConfig['secret_source'])));
 
             $cipherDefinition->addTag('agentsib_crypto.cipher', array(

@@ -44,7 +44,7 @@ class ChainXORSecretSource implements SecretSourceInterface
         $result = '';
         for ($i=0; $i < strlen($str);) {
             for ($j=0; ($j < strlen($key) && $i < strlen($str)); $j++,$i++) {
-                $result .= $str{$i} ^ $key{$j};
+                $result .= $str[$i] ^ $key[$j];
             }
         }
 

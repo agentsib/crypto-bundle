@@ -6,6 +6,7 @@
 namespace AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
@@ -13,7 +14,9 @@ class PhpConstantSecretSourceFactory implements SecretSourceFactoryInterface
 {
     public function create(ContainerBuilder $container, $sourceName, $config = [])
     {
-        $secretSourceDefinition = new DefinitionDecorator('agentsib_crypto.secret_source.prototype.php_constant');
+        $secretSourceDefinition = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition')
+            ? new ChildDefinition('agentsib_crypto.secret_source.prototype.php_constant')
+            : new DefinitionDecorator('agentsib_crypto.secret_source.prototype.php_constant');
         $secretSourceDefinition->replaceArgument(0, $config);
 
         $serviceId = 'agentsib_crypto.secret_source.'.$sourceName;

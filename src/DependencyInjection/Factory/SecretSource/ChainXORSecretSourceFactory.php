@@ -6,6 +6,7 @@
 namespace AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
@@ -13,7 +14,9 @@ class ChainXORSecretSourceFactory implements SecretSourceFactoryInterface
 {
     public function create(ContainerBuilder $container, $sourceName, $config = [])
     {
-        $secretSourceDefinition = new DefinitionDecorator('agentsib_crypto.secret_source.prototype.chain_xor');
+        $secretSourceDefinition = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition')
+            ? new ChildDefinition('agentsib_crypto.secret_source.prototype.chain_xor')
+            : new DefinitionDecorator('agentsib_crypto.secret_source.prototype.chain_xor');
         foreach ($config as $item) {
             $secretSourceDefinition->addMethodCall('addSecretSource', [
                 $container->findDefinition(sprintf('agentsib_crypto.secret_source.%s', $item))

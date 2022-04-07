@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 
 class AgentSIBCryptoExtension extends Extension
 {
@@ -87,7 +88,9 @@ class AgentSIBCryptoExtension extends Extension
                 throw new \InvalidArgumentException(sprintf('Cipher "%s" not found', $cipherConfig['cipher']));
             }
 
-            $cipherDefinition = new DefinitionDecorator($ciphers[strtolower($cipherConfig['cipher'])]);
+            $cipherDefinition = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition')
+                ? new ChildDefinition($ciphers[strtolower($cipherConfig['cipher'])])
+                : new DefinitionDecorator($ciphers[strtolower($cipherConfig['cipher'])]);
             $cipherDefinition->replaceArgument(0, new Reference(sprintf('agentsib_crypto.secret_source.%s', $cipherConfig['secret_source'])));
 
             $cipherDefinition->addTag('agentsib_crypto.cipher', array(

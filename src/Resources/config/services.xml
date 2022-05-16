@@ -5,7 +5,7 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
 
-        <service id="agentsib_crypto.crypto_service" class="AgentSIB\CryptoBundle\Service\CryptoService">
+        <service id="agentsib_crypto.crypto_service" class="AgentSIB\CryptoBundle\Service\CryptoService" public="true">
             <argument type="string"><!-- Current version --></argument>
             <call method="setLogger">
                 <argument type="service" id="logger" />

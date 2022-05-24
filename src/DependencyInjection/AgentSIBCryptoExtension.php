@@ -7,6 +7,7 @@ namespace AgentSIB\CryptoBundle\DependencyInjection;
 
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\SecretSourceFactoryInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -33,6 +34,10 @@ class AgentSIBCryptoExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        if (class_exists(Application::class)) {
+            $loader->load('console.xml');
+        }
 
         $this->loadSecretSources($config['secret_sources'], $container);
         $this->loadCiphers($config['ciphers'], $container);

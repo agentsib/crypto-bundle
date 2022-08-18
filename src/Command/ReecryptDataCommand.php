@@ -100,7 +100,6 @@ class ReecryptDataCommand extends Command
                 }
                 $em->flush($entity);
 
-                $em->clear($entity);
                 $em->detach($entity);
                 unset($entity);
                 gc_enable();

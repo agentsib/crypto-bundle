@@ -1,24 +1,48 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Command;
 
-
 use AgentSIB\CryptoBundle\Annotation\Encrypted;
+use AgentSIB\CryptoBundle\Service\CryptoService;
 use AgentSIB\CryptoBundle\Subscriber\DoctrineEncryptSubscriber;
 use AgentSIB\CryptoBundle\Utils\ClassUtils;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReecryptDataCommand extends ContainerAwareCommand
+class ReecryptDataCommand extends Command
 {
+    /**
+     * @var CryptoService
+     */
+    private $cryptService;
+    /**
+     * @var ManagerRegistry
+     */
+    private $registry;
+    /**
+     * @var Reader
+     */
+    private $annotationReader;
+
+    public function __construct(
+        CryptoService $cryptService,
+        ManagerRegistry $registry,
+        Reader $annotationReader,
+        string $name = null
+    ) {
+        parent::__construct($name);
+        $this->cryptService = $cryptService;
+        $this->registry = $registry;
+        $this->annotationReader = $annotationReader;
+    }
+
     protected function configure()
     {
         $this->setName('agentsib_crypto:reecrypt')
@@ -29,9 +53,7 @@ class ReecryptDataCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine')->getManager($input->getOption('em'));
-        $cryptoService = $this->getContainer()->get('agentsib_crypto.crypto_service');
-
+        $em = $this->registry->getManager($input->getOption('em'));
         /** @var ClassMetadata[] $emMetadata */
         $emMetadata = $em->getMetadataFactory()->getAllMetadata();
 
@@ -73,7 +95,7 @@ class ReecryptDataCommand extends ContainerAwareCommand
                         continue; // TODO More complex
                     }
 
-                    $encValue = $cryptoService->encrypt($curValue);
+                    $encValue = $this->cryptService->encrypt($curValue);
                     ClassUtils::setPropertyValue($entity, $refEncryptProperty, $encValue);
                 }
                 $em->flush($entity);
@@ -91,6 +113,8 @@ class ReecryptDataCommand extends ContainerAwareCommand
 
         $output->writeln('');
         $output->writeln('All done');
+
+        return 0;
     }
 
     /**
@@ -105,7 +129,7 @@ class ReecryptDataCommand extends ContainerAwareCommand
         $properties    = [];
         foreach ($propertyArray as $property) {
             /** @var Encrypted $annotation */
-            if ($annotation = $this->getContainer()->get('annotation_reader')->getPropertyAnnotation(
+            if ($annotation = $this->annotationReader->getPropertyAnnotation(
                 $property,
                 DoctrineEncryptSubscriber::ENCRYPTED_ANNOTATION
             )) {

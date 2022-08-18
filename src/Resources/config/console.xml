@@ -6,18 +6,24 @@
 
     <services>
         <service id="agentsib_crypto.benchmark.command" class="AgentSIB\CryptoBundle\Command\BenchmarkCommand">
+            <argument type="service" id="agentsib_crypto.crypto_service" />
             <tag name="console.command" command="agentsib_crypto:benchmark" />
         </service>
 
         <service id="agentsib_crypto.reecrypt_data.command" class="AgentSIB\CryptoBundle\Command\ReecryptDataCommand">
+            <argument type="service" id="agentsib_crypto.crypto_service" />
+            <argument type="service" id="doctrine" />
+            <argument type="service" id="annotation_reader" />
             <tag name="console.command" command="agentsib_crypto:reecrypt" />
         </service>
 
         <service id="agentsib_crypto.string_decrypt.command" class="AgentSIB\CryptoBundle\Command\StringDecryptCommand">
+            <argument type="service" id="agentsib_crypto.crypto_service" />
             <tag name="console.command" command="agentsib_crypto:decrypt" />
         </service>
 
         <service id="agentsib_crypto.string_encrypt.command" class="AgentSIB\CryptoBundle\Command\StringEncryptCommand">
+            <argument type="service" id="agentsib_crypto.crypto_service" />
             <tag name="console.command" command="agentsib_crypto:encrypt" />
         </service>
     </services>

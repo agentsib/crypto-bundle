@@ -69,7 +69,7 @@ class CryptoService implements LoggerAwareInterface
     public function decrypt($encryptedString)
     {
         try {
-            if (!preg_match('/^enc:(v[0-9]+):(.+)$/', $encryptedString, $matcher)) {
+            if (!preg_match('/^enc:(v[0-9]+):(.+)$/', (string)$encryptedString, $matcher)) {
                 throw new CryptoException('Invalid encrypted string');
             }
             $version = $matcher[1];
@@ -107,7 +107,7 @@ class CryptoService implements LoggerAwareInterface
      */
     public function isEncryptedString($encryptedString, $checkVersion = true)
     {
-        if (preg_match('/^enc:(v[0-9]+)::(.+)$/', $encryptedString, $matcher)) {
+        if (preg_match('/^enc:(v[0-9]+)::(.+)$/', (string)$encryptedString, $matcher)) {
             $version = $matcher[1];
             if ($checkVersion) {
                 return isset($this->ciphers[$version]);

@@ -13,6 +13,7 @@ use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\EnvironmentSe
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\FileContentSecretSourceFactory;
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\PhpConstantSecretSourceFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class AgentSIBCryptoBundle extends Bundle
@@ -33,7 +34,7 @@ final class AgentSIBCryptoBundle extends Bundle
         $container->addCompilerPass(new CiphersPass());
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         if (null === $this->extension) {
             $class = $this->getContainerExtensionClass();

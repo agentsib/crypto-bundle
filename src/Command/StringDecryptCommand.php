@@ -28,7 +28,7 @@ class StringDecryptCommand extends Command
         $this->addArgument('encryptedString', InputArgument::REQUIRED, 'Encrypted string');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(
             $this->cryptService->decrypt(
@@ -36,6 +36,6 @@ class StringDecryptCommand extends Command
             )
         );
 
-        return 0;
+        return self::SUCCESS;
     }
 }

@@ -51,7 +51,7 @@ class ReecryptDataCommand extends Command
         $this->addOption('em', null, InputOption::VALUE_REQUIRED, 'Entity manager', null);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $em = $this->registry->getManager($input->getOption('em'));
         /** @var ClassMetadata[] $emMetadata */
@@ -113,7 +113,7 @@ class ReecryptDataCommand extends Command
         $output->writeln('');
         $output->writeln('All done');
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**
@@ -137,5 +137,4 @@ class ReecryptDataCommand extends Command
         }
         return $properties;
     }
-
 }

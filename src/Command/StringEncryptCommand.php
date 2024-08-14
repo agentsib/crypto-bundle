@@ -28,7 +28,7 @@ class StringEncryptCommand extends Command
         $this->addArgument('plainString', InputArgument::REQUIRED, 'Plain string');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(
             $this->cryptService->encrypt(
@@ -36,6 +36,6 @@ class StringEncryptCommand extends Command
             )
         );
 
-        return 0;
+        return self::SUCCESS;
     }
 }

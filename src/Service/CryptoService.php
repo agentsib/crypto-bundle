@@ -29,7 +29,6 @@ class CryptoService implements LoggerAwareInterface
         $this->logger = $logger;
     }
 
-
     public function addCipherForVersion($version, CipherInterface $cipher)
     {
         $this->ciphers[$version] = $cipher;

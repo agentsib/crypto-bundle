@@ -18,18 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReecryptDataCommand extends Command
 {
-    /**
-     * @var CryptoService
-     */
-    private $cryptService;
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
-    /**
-     * @var Reader
-     */
-    private $annotationReader;
+    private CryptoService $cryptService;
+    private ManagerRegistry $registry;
+    private Reader $annotationReader;
 
     public function __construct(
         CryptoService $cryptService,
@@ -51,7 +42,7 @@ class ReecryptDataCommand extends Command
         $this->addOption('em', null, InputOption::VALUE_REQUIRED, 'Entity manager', null);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $em = $this->registry->getManager($input->getOption('em'));
         /** @var ClassMetadata[] $emMetadata */
@@ -113,7 +104,7 @@ class ReecryptDataCommand extends Command
         $output->writeln('');
         $output->writeln('All done');
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**
@@ -137,5 +128,4 @@ class ReecryptDataCommand extends Command
         }
         return $properties;
     }
-
 }

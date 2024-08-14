@@ -10,8 +10,7 @@ use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 abstract class AbstractCipher implements CipherInterface
 {
-    /** @var SecretSourceInterface */
-    protected $secretSource;
+    protected SecretSourceInterface $secretSource;
 
     public function __construct(SecretSourceInterface $secretSource)
     {

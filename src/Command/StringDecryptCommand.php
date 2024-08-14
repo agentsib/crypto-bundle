@@ -10,8 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StringDecryptCommand extends Command
 {
-    /** @var CryptoService */
-    protected $cryptService;
+    protected CryptoService $cryptService;
 
     public function __construct(CryptoService $cryptService, string $name = null)
     {
@@ -28,7 +27,7 @@ class StringDecryptCommand extends Command
         $this->addArgument('encryptedString', InputArgument::REQUIRED, 'Encrypted string');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(
             $this->cryptService->decrypt(
@@ -36,6 +35,6 @@ class StringDecryptCommand extends Command
             )
         );
 
-        return 0;
+        return self::SUCCESS;
     }
 }

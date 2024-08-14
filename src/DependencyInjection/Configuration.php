@@ -13,7 +13,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /** @var SecretSourceFactoryInterface[] */
-    private $secretSourceFactories;
+    private array $secretSourceFactories;
 
     /**
      * Configuration constructor.

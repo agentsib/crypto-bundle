@@ -11,8 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BenchmarkCommand extends Command
 {
-    /** @var CryptoService */
-    protected $cryptService;
+    protected CryptoService $cryptService;
 
     public function __construct(CryptoService $cryptService, string $name = null)
     {
@@ -29,7 +28,7 @@ class BenchmarkCommand extends Command
         $this->addOption('length', null, InputOption::VALUE_REQUIRED, 'Data length (bytes)', 100);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $count = intval($input->getOption('count'));
         $length = intval($input->getOption('length'));
@@ -67,6 +66,6 @@ class BenchmarkCommand extends Command
         $output->writeln(sprintf('Encrypt: %s seconds, avg: %s per second', $encryptTime, round($count/$encryptTime, 3)));
         $output->writeln(sprintf('Decrypt: %s seconds, avg: %s per second', $decryptTime, round($count/$decryptTime, 3)));
 
-        return 0;
+        return self::SUCCESS;
     }
 }

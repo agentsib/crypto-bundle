@@ -13,7 +13,7 @@ class ChainXORSecretSource implements SecretSourceInterface
     /**
      * @var SecretSourceInterface[]
      */
-    private $secretSources;
+    private array $secretSources;
 
     public function __construct()
     {

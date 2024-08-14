@@ -18,18 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReecryptDataCommand extends Command
 {
-    /**
-     * @var CryptoService
-     */
-    private $cryptService;
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
-    /**
-     * @var Reader
-     */
-    private $annotationReader;
+    private CryptoService $cryptService;
+    private ManagerRegistry $registry;
+    private Reader $annotationReader;
 
     public function __construct(
         CryptoService $cryptService,

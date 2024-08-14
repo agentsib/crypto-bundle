@@ -26,11 +26,8 @@ class DoctrineEncryptSubscriber implements EventSubscriber
 
     const ENCRYPTED_ANNOTATION = 'AgentSIB\CryptoBundle\Annotation\Encrypted';
 
-
-    /** @var CryptoService */
-    private $cryptoService;
-    /** @var AnnotationReader */
-    private $annotationReader;
+    private CryptoService $cryptoService;
+    private AnnotationReader $annotationReader;
 
     public function __construct(CryptoService $cryptoService, AnnotationReader $annotationReader)
     {
@@ -209,6 +206,4 @@ class DoctrineEncryptSubscriber implements EventSubscriber
 
         return $propertiesArray;
     }
-
-
 }

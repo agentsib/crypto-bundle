@@ -11,8 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BenchmarkCommand extends Command
 {
-    /** @var CryptoService */
-    protected $cryptService;
+    protected CryptoService $cryptService;
 
     public function __construct(CryptoService $cryptService, string $name = null)
     {

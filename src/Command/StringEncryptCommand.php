@@ -10,8 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StringEncryptCommand extends Command
 {
-    /** @var CryptoService */
-    protected $cryptService;
+    protected CryptoService $cryptService;
 
     public function __construct(CryptoService $cryptService, string $name = null)
     {

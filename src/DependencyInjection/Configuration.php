@@ -24,15 +24,10 @@ class Configuration implements ConfigurationInterface
         $this->secretSourceFactories = $secretSourcesFactories;
     }
 
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        if (method_exists(TreeBuilder::class, 'root')) {
-            $treeBuilder = new TreeBuilder();
-            $rootNode = $treeBuilder->root('agentsib_crypto');
-        } else {
-            $treeBuilder = new TreeBuilder('agentsib_crypto');
-            $rootNode = $treeBuilder->getRootNode();
-        }
+        $treeBuilder = new TreeBuilder('agentsib_crypto');
+        $rootNode = $treeBuilder->getRootNode();
 
         $secretSourcesPrototypeNode = $rootNode
             ->children()

@@ -1,14 +1,9 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Tests\Functional\app;
 
-
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
@@ -34,32 +29,24 @@ class AppKernel extends Kernel
         parent::__construct($environment, $debug);
     }
 
-    public function getName()
+    public function registerBundles(): iterable
     {
-        if (null === $this->name) {
-            $this->name = parent::getName().substr(md5($this->rootConfig), -16);
-        }
-        return $this->name;
-    }
-
-
-    public function registerBundles()
-    {
-        if (!is_file($filename = $this->getRootDir().'/'.$this->testCase.'/bundles.php')) {
+        if (!is_file($filename = $this->getProjectDir() . '/tests/Functional/app/' . $this->testCase . '/bundles.php')) {
             throw new \RuntimeException(sprintf('The bundles file "%s" does not exist.', $filename));
         }
+
         return include $filename;
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return sys_get_temp_dir().'/'.$this->varDir.'/'.$this->testCase.'/cache/'.$this->environment;
     }
-    public function getLogDir()
+
+    public function getLogDir(): string
     {
         return sys_get_temp_dir().'/'.$this->varDir.'/'.$this->testCase.'/logs';
     }
-
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
@@ -70,16 +57,17 @@ class AppKernel extends Kernel
     {
         return serialize(array($this->varDir, $this->testCase, $this->rootConfig, $this->getEnvironment(), $this->isDebug()));
     }
+
     public function unserialize($str)
     {
         $a = unserialize($str);
         $this->__construct($a[0], $a[1], $a[2], $a[3], $a[4]);
     }
-    protected function getKernelParameters()
+
+    protected function getKernelParameters(): array
     {
         $parameters = parent::getKernelParameters();
         $parameters['kernel.test_case'] = $this->testCase;
         return $parameters;
     }
-
 }

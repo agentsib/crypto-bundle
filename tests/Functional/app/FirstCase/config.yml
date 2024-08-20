@@ -7,6 +7,6 @@ agentsib_crypto:
             simple: test123
     ciphers:
         v1:
-            cipher: aes256openssl
+            cipher: aes256
             secret_source: test
     current_cipher: v1

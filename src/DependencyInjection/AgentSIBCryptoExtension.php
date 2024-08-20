@@ -1,20 +1,16 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\DependencyInjection;
 
 use AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource\SecretSourceFactoryInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Console\Application;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ChildDefinition;
 
 class AgentSIBCryptoExtension extends Extension
 {
@@ -58,8 +54,9 @@ class AgentSIBCryptoExtension extends Extension
 
             return new $class($this->secretSourceFactories);
         }
-    }
 
+        return null;
+    }
 
     private function loadSecretSources(array $config, ContainerBuilder $container)
     {
@@ -93,9 +90,7 @@ class AgentSIBCryptoExtension extends Extension
                 throw new \InvalidArgumentException(sprintf('Cipher "%s" not found', $cipherConfig['cipher']));
             }
 
-            $cipherDefinition = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition')
-                ? new ChildDefinition($ciphers[strtolower($cipherConfig['cipher'])])
-                : new DefinitionDecorator($ciphers[strtolower($cipherConfig['cipher'])]);
+            $cipherDefinition = new ChildDefinition($ciphers[strtolower($cipherConfig['cipher'])]);
             $cipherDefinition->replaceArgument(0, new Reference(sprintf('agentsib_crypto.secret_source.%s', $cipherConfig['secret_source'])));
 
             $cipherDefinition->addTag('agentsib_crypto.cipher', array(
@@ -108,7 +103,7 @@ class AgentSIBCryptoExtension extends Extension
         }
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'agentsib_crypto';
     }

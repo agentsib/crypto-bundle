@@ -1,10 +1,6 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Tests\Functional;
-
 
 class FirstTest extends KernelTestCase
 {

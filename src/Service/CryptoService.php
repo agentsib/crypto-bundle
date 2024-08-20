@@ -1,32 +1,24 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Service;
 
 use AgentSIB\CryptoBundle\Model\CipherInterface;
 use AgentSIB\CryptoBundle\Model\Exception\CryptoException;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 
 class CryptoService implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /** @var string */
     private $currentCipherVersion;
     /** @var CipherInterface[] */
     private $ciphers = [];
-    /** @var LoggerInterface */
-    private $logger;
 
     public function __construct($currentCipherVersion)
     {
         $this->currentCipherVersion = $currentCipherVersion;
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
     }
 
     public function addCipherForVersion($version, CipherInterface $cipher)

@@ -1,23 +1,20 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Tests\Functional;
-
 
 use AgentSIB\CryptoBundle\Tests\Functional\app\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as BaseKernelTestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class KernelTestCase extends BaseKernelTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         static::deleteTmpDir();
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::deleteTmpDir();
     }
@@ -31,14 +28,14 @@ class KernelTestCase extends BaseKernelTestCase
         $fs->remove($dir);
     }
 
-    protected static function getKernelClass()
+    protected static function getKernelClass(): string
     {
         require_once __DIR__.'/app/AppKernel.php';
 
         return AppKernel::class;
     }
 
-    protected static function createKernel(array $options = array())
+    protected static function createKernel(array $options = array()): KernelInterface
     {
         $class = self::getKernelClass();
 
@@ -55,11 +52,8 @@ class KernelTestCase extends BaseKernelTestCase
         );
     }
 
-
     protected static function getVarDir()
     {
         return 'SB'.substr(strrchr(get_called_class(), '\\'), 1);
     }
-
-
 }

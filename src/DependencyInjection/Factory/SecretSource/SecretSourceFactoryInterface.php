@@ -1,7 +1,4 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource;
 
@@ -12,20 +9,20 @@ interface SecretSourceFactoryInterface
 {
     /**
      * @param ContainerBuilder $container
-     * @param $sourceName
-     * @param array $config
+     * @param string $sourceName
+     * @param array|string $config
      *
      * @return string service_id
      */
-    public function create(ContainerBuilder $container, $sourceName, $config = []);
+    public function create(ContainerBuilder $container, string $sourceName, array|string $config): string;
 
     /**
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * @param ArrayNodeDefinition $builder
      */
-    public function addConfiguration(ArrayNodeDefinition $builder);
+    public function addConfiguration(ArrayNodeDefinition $builder): void;
 }

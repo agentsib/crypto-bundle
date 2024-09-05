@@ -11,26 +11,26 @@ class CryptoService implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /** @var string */
-    private $currentCipherVersion;
+    private string $currentCipherVersion;
     /** @var CipherInterface[] */
-    private $ciphers = [];
+    private array $ciphers = [];
 
-    public function __construct($currentCipherVersion)
+    public function __construct(string $currentCipherVersion)
     {
         $this->currentCipherVersion = $currentCipherVersion;
     }
 
-    public function addCipherForVersion($version, CipherInterface $cipher)
+    public function addCipherForVersion(string $version, CipherInterface $cipher): void
     {
         $this->ciphers[$version] = $cipher;
     }
 
     /**
-     * @param $plainString
+     * @param string $plainString
      * @return string
+     * @throws CryptoException
      */
-    public function encrypt($plainString)
+    public function encrypt(string $plainString): string
     {
         try {
             if (!isset($this->ciphers[$this->currentCipherVersion])) {
@@ -54,13 +54,14 @@ class CryptoService implements LoggerAwareInterface
     }
 
     /**
-     * @param $encryptedString
+     * @param string $encryptedString
      * @return string
+     * @throws CryptoException
      */
-    public function decrypt($encryptedString)
+    public function decrypt(string $encryptedString): string
     {
         try {
-            if (!preg_match('/^enc:(v[0-9]+):(.+)$/', (string)$encryptedString, $matcher)) {
+            if (!preg_match('/^enc:(v[0-9]+):(.+)$/', $encryptedString, $matcher)) {
                 throw new CryptoException('Invalid encrypted string');
             }
             $version = $matcher[1];
@@ -92,11 +93,11 @@ class CryptoService implements LoggerAwareInterface
     }
 
     /**
-     * @param $encryptedString
+     * @param string $encryptedString
      * @param bool $checkVersion
      * @return bool
      */
-    public function isEncryptedString($encryptedString, $checkVersion = true)
+    public function isEncryptedString(string $encryptedString, bool $checkVersion = true): bool
     {
         if (preg_match('/^enc:(v[0-9]+)::(.+)$/', (string)$encryptedString, $matcher)) {
             $version = $matcher[1];

@@ -1,7 +1,4 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\DependencyInjection\Compiler;
 
@@ -11,7 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class CiphersPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $cryptoServiceDefinition = $container->findDefinition('agentsib_crypto.crypto_service');
 

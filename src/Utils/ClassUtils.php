@@ -1,22 +1,19 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Utils;
 
-use Doctrine\Common\Util\ClassUtils as DocrineClassUtils;
+use Doctrine\Common\Util\ClassUtils as DoctrineClassUtils;
 
 class ClassUtils
 {
     /**
-     * @param $object
-     * @param string|\ReflectionClass $property
+     * @param object $object
+     * @param \ReflectionClass|string $property
      * @return mixed
      *
      * @throws \ReflectionException|\LogicException
      */
-    public static function getPropertyValue($object, $property)
+    public static function getPropertyValue(object $object, \ReflectionClass|string $property): mixed
     {
         if ($property instanceof \ReflectionProperty) {
             $refClass = $property->getDeclaringClass();
@@ -46,12 +43,12 @@ class ClassUtils
     }
 
     /**
-     * @param $object
-     * @param string|\ReflectionClass $property
-     *
-     * @throws \ReflectionException|\LogicException
+     * @param object $object
+     * @param \ReflectionClass|string $property
+     * @param mixed $value
+     * @throws \ReflectionException
      */
-    public static function setPropertyValue($object, $property, $value)
+    public static function setPropertyValue(object $object, \ReflectionClass|string $property, mixed $value): void
     {
         if ($property instanceof \ReflectionProperty) {
             $refClass = $property->getDeclaringClass();
@@ -76,15 +73,14 @@ class ClassUtils
             $refProperty->setValue($object, $value);
             $refProperty->setAccessible(false);
         }
-
     }
 
-    public static function getEntityClass($entity)
+    public static function getEntityClass(object $entity): string
     {
-        if(strstr(get_class($entity), "Proxies")) {
-            return DocrineClassUtils::getClass($entity);
-        } else {
-            return get_class($entity);
+        if (str_contains(get_class($entity), "Proxies")) {
+            return DoctrineClassUtils::getClass($entity);
         }
+
+        return get_class($entity);
     }
 }

@@ -1,7 +1,4 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\DependencyInjection;
 
@@ -29,6 +26,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('agentsib_crypto');
         $rootNode = $treeBuilder->getRootNode();
 
+        /** @var ArrayNodeDefinition $secretSourcesPrototypeNode */
         $secretSourcesPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('secret_sources')
@@ -85,7 +83,7 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    public function addSecretSourceSection(ArrayNodeDefinition $secretSourcesPrototypeNode)
+    public function addSecretSourceSection(ArrayNodeDefinition $secretSourcesPrototypeNode): void
     {
         foreach ($this->secretSourceFactories as $factory) {
             $factory->addConfiguration($secretSourcesPrototypeNode);

@@ -35,7 +35,7 @@ class KernelTestCase extends BaseKernelTestCase
         return AppKernel::class;
     }
 
-    protected static function createKernel(array $options = array()): KernelInterface
+    protected static function createKernel(array $options = []): KernelInterface
     {
         $class = self::getKernelClass();
 

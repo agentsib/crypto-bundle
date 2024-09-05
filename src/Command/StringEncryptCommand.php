@@ -18,7 +18,7 @@ class StringEncryptCommand extends Command
         $this->cryptService = $cryptService;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('agentsib_crypto:encrypt')

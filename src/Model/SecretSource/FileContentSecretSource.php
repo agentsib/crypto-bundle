@@ -1,7 +1,4 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Model\SecretSource;
 
@@ -10,15 +7,15 @@ use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 class FileContentSecretSource implements SecretSourceInterface
 {
-    private $fileName;
+    private string $fileName;
 
-    public function __construct($fileName)
+    public function __construct(string $fileName)
     {
         $this->fileName = $fileName;
     }
 
 
-    public function getSecret()
+    public function getSecret(): string
     {
         if (!file_exists($this->fileName)) {
             throw new SecretSourceExtension(sprintf('File "%s" not exists', $this->fileName));

@@ -42,25 +42,25 @@ class DoctrineEncryptSubscriber implements EventSubscriber
         ];
     }
 
-    public function preUpdate(PreUpdateEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
         $this->processFields($entity, self::OPERATION_ENCRYPT);
     }
 
-    public function postUpdate(PostUpdateEventArgs $args)
+    public function postUpdate(PostUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
         $this->processFields($entity, self::OPERATION_DECRYPT);
     }
 
-    public function postLoad(PostLoadEventArgs $args)
+    public function postLoad(PostLoadEventArgs $args): void
     {
         $entity = $args->getObject();
         $this->processFields($entity, self::OPERATION_DECRYPT);
     }
 
-    public function preFlush(PreFlushEventArgs $args)
+    public function preFlush(PreFlushEventArgs $args): void
     {
         $unitOfWork = $args->getObjectManager()->getUnitOfWork();
         foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
@@ -68,7 +68,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
         }
     }
 
-    public function postFlush(PostFlushEventArgs $args)
+    public function postFlush(PostFlushEventArgs $args): void
     {
         $unitOfWork = $args->getObjectManager()->getUnitOfWork();
         foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
@@ -76,7 +76,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
         }
     }
 
-    public function processFields($entity, $operation)
+    public function processFields(object $entity, string $operation): void
     {
         $realClass = ClassUtils::getEntityClass($entity);
 
@@ -84,7 +84,6 @@ class DoctrineEncryptSubscriber implements EventSubscriber
         $properties = $this->getClassProperties($reflectionClass);
 
         foreach ($properties as $refProperty) {
-
             if ($this->annotationReader->getPropertyAnnotation($refProperty, 'Doctrine\ORM\Mapping\Embedded')) {
                 $this->handleEmbeddedAnnotation($entity, $refProperty, $operation);
                 continue;
@@ -155,13 +154,11 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                         break;
 
                 }
-
             }
         }
-
     }
 
-    private function handleEmbeddedAnnotation($entity, \ReflectionProperty $embeddedProperty, $operation)
+    private function handleEmbeddedAnnotation(object $entity, \ReflectionProperty $embeddedProperty, string $operation): void
     {
         $realClass = ClassUtils::getEntityClass($entity);
         $reflectionClass = new \ReflectionClass($realClass);
@@ -174,7 +171,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                 //Get the information (value) of the property
                 try {
                     $embeddedEntity = $entity->$getter();
-                } catch(\Exception $e) {
+                } catch(\Exception) {
                     $embeddedEntity = null;
                 }
             }
@@ -184,20 +181,21 @@ class DoctrineEncryptSubscriber implements EventSubscriber
         }
     }
 
-    private function getClassProperties(\ReflectionClass $reflectionClass){
-
+    private function getClassProperties(\ReflectionClass $reflectionClass): array
+    {
         $properties = $reflectionClass->getProperties();
-        $propertiesArray = array();
+        $propertiesArray = [];
 
-        foreach($properties as $property){
+        foreach ($properties as $property) {
             $propertyName = $property->getName();
             $propertiesArray[$propertyName] = $property;
         }
 
-        if($parentClass = $reflectionClass->getParentClass()){
+        if ($parentClass = $reflectionClass->getParentClass()) {
             $parentPropertiesArray = $this->getClassProperties($parentClass);
-            if(count($parentPropertiesArray) > 0)
+            if (count($parentPropertiesArray) > 0) {
                 $propertiesArray = array_merge($parentPropertiesArray, $propertiesArray);
+            }
         }
 
         return $propertiesArray;

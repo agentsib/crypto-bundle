@@ -1,23 +1,19 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Model\SecretSource;
 
-use AgentSIB\CryptoBundle\Model\Exception\SecretSourceExtension;
 use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 class SimpleSecretSource implements SecretSourceInterface
 {
-    private $secret;
+    private string $secret;
 
-    public function __construct($secret)
+    public function __construct(string $secret)
     {
         $this->secret = $secret;
     }
 
-    public function getSecret()
+    public function getSecret(): string
     {
         return $this->secret;
     }

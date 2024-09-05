@@ -1,22 +1,21 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\DependencyInjection\Factory\SecretSource;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 class ChainXORSecretSourceFactory implements SecretSourceFactoryInterface
 {
-    public function create(ContainerBuilder $container, $sourceName, $config = [])
+    public function create(ContainerBuilder $container, string $sourceName, array|string $config): string
     {
-        $secretSourceDefinition = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition')
-            ? new ChildDefinition('agentsib_crypto.secret_source.prototype.chain_xor')
-            : new DefinitionDecorator('agentsib_crypto.secret_source.prototype.chain_xor');
+        $secretSourceDefinition = new ChildDefinition('agentsib_crypto.secret_source.prototype.chain_xor');
+
+        if (!is_array($config)) {
+            $config = [$config];
+        }
+
         foreach ($config as $item) {
             $secretSourceDefinition->addMethodCall('addSecretSource', [
                 $container->findDefinition(sprintf('agentsib_crypto.secret_source.%s', $item))
@@ -29,12 +28,12 @@ class ChainXORSecretSourceFactory implements SecretSourceFactoryInterface
         return $serviceId;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'chain_xor';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

@@ -1,7 +1,4 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Model\SecretSource;
 
@@ -10,15 +7,14 @@ use AgentSIB\CryptoBundle\Model\SecretSourceInterface;
 
 class EnvironmentSecretSource implements SecretSourceInterface
 {
-    /** @var string */
-    private $environmentName;
+    private ?string $environmentName;
 
-    public function __construct($environmentName)
+    public function __construct(?string $environmentName)
     {
         $this->environmentName = $environmentName;
     }
 
-    public function getSecret()
+    public function getSecret(): string
     {
         $value = getenv($this->environmentName);
         if ($value === false) {

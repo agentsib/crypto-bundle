@@ -34,7 +34,7 @@ class ReencryptDataCommand extends Command
         $this->annotationReader = $annotationReader;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('agentsib_crypto:reencrypt')

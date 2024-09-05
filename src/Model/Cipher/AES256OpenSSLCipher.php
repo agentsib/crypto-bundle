@@ -1,7 +1,4 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Model\Cipher;
 
@@ -32,7 +29,7 @@ class AES256OpenSSLCipher extends AbstractCipher
         }
     }
 
-    public function encrypt($plainString)
+    public function encrypt(string $plainString): string
     {
         $ivSize = openssl_cipher_iv_length($this->algo);
         $iv     = random_bytes($ivSize);
@@ -53,7 +50,7 @@ class AES256OpenSSLCipher extends AbstractCipher
         return $hmac . $iv . $ciphertext;
     }
 
-    public function decrypt($encryptedString)
+    public function decrypt(string $encryptedString): string
     {
         $hmac       = mb_substr($encryptedString, 0, $this->hmacSize, '8bit');
         $ivSize     = openssl_cipher_iv_length($this->algo);

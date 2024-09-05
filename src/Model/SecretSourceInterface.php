@@ -1,7 +1,4 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Model;
 
@@ -13,5 +10,5 @@ interface SecretSourceInterface
      * @throws SecretSourceExtension
      * @return string Secret
      */
-    public function getSecret();
+    public function getSecret(): string;
 }

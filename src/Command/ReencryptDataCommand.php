@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReecryptDataCommand extends Command
+class ReencryptDataCommand extends Command
 {
     private CryptoService $cryptService;
     private ManagerRegistry $registry;
@@ -36,8 +36,10 @@ class ReecryptDataCommand extends Command
 
     protected function configure()
     {
-        $this->setName('agentsib_crypto:reecrypt')
-            ->setDescription('Reecrypt doctrine data');
+        $this
+            ->setName('agentsib_crypto:reencrypt')
+            ->setAliases(['agentsib_crypto:reecrypt'])
+            ->setDescription('Re-encrypt doctrine data');
 
         $this->addOption('em', null, InputOption::VALUE_REQUIRED, 'Entity manager', null);
     }

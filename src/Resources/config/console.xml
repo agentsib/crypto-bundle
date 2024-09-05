@@ -10,11 +10,11 @@
             <tag name="console.command" command="agentsib_crypto:benchmark" />
         </service>
 
-        <service id="agentsib_crypto.reecrypt_data.command" class="AgentSIB\CryptoBundle\Command\ReecryptDataCommand">
+        <service id="agentsib_crypto.reencrypt_data.command" class="AgentSIB\CryptoBundle\Command\ReencryptDataCommand">
             <argument type="service" id="agentsib_crypto.crypto_service" />
             <argument type="service" id="doctrine" />
             <argument type="service" id="annotation_reader" />
-            <tag name="console.command" command="agentsib_crypto:reecrypt" />
+            <tag name="console.command" command="agentsib_crypto:reencrypt" />
         </service>
 
         <service id="agentsib_crypto.string_decrypt.command" class="AgentSIB\CryptoBundle\Command\StringDecryptCommand">

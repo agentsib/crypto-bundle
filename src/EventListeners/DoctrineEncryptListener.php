@@ -1,13 +1,12 @@
 <?php
 
-namespace AgentSIB\CryptoBundle\Subscriber;
+namespace AgentSIB\CryptoBundle\EventListeners;
 
 use AgentSIB\CryptoBundle\Annotation\Encrypted;
 use AgentSIB\CryptoBundle\Model\Exception\DecryptException;
 use AgentSIB\CryptoBundle\Service\CryptoService;
 use AgentSIB\CryptoBundle\Utils\ClassUtils;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
@@ -15,7 +14,7 @@ use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
-class DoctrineEncryptSubscriber implements EventSubscriber
+class DoctrineEncryptListener
 {
     public const OPERATION_ENCRYPT = 'encrypt';
     public const OPERATION_DECRYPT = 'decrypt';

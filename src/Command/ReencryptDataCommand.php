@@ -3,8 +3,8 @@
 namespace AgentSIB\CryptoBundle\Command;
 
 use AgentSIB\CryptoBundle\Annotation\Encrypted;
+use AgentSIB\CryptoBundle\EventListeners\DoctrineEncryptListener;
 use AgentSIB\CryptoBundle\Service\CryptoService;
-use AgentSIB\CryptoBundle\Subscriber\DoctrineEncryptSubscriber;
 use AgentSIB\CryptoBundle\Utils\ClassUtils;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityRepository;
@@ -123,7 +123,7 @@ class ReencryptDataCommand extends Command
             /** @var Encrypted $annotation */
             if ($annotation = $this->annotationReader->getPropertyAnnotation(
                 $property,
-                DoctrineEncryptSubscriber::ENCRYPTED_ANNOTATION
+                DoctrineEncryptListener::ENCRYPTED_ANNOTATION
             )) {
                 $properties[$property->getName()] = $annotation->decryptedProperty;
             }

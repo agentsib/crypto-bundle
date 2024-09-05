@@ -1,22 +1,18 @@
 <?php
-/**
- * User: ikovalenko
- */
 
 namespace AgentSIB\CryptoBundle\Subscriber;
 
-
 use AgentSIB\CryptoBundle\Annotation\Encrypted;
-use AgentSIB\CryptoBundle\Model\Exception\CryptoException;
 use AgentSIB\CryptoBundle\Model\Exception\DecryptException;
 use AgentSIB\CryptoBundle\Service\CryptoService;
 use AgentSIB\CryptoBundle\Utils\ClassUtils;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Event\PostLoadEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
 class DoctrineEncryptSubscriber implements EventSubscriber
@@ -48,25 +44,25 @@ class DoctrineEncryptSubscriber implements EventSubscriber
 
     public function preUpdate(PreUpdateEventArgs $args)
     {
-        $entity = $args->getEntity();
+        $entity = $args->getObject();
         $this->processFields($entity, self::OPERATION_ENCRYPT);
     }
 
-    public function postUpdate(LifecycleEventArgs $args)
+    public function postUpdate(PostUpdateEventArgs $args)
     {
-        $entity = $args->getEntity();
+        $entity = $args->getObject();
         $this->processFields($entity, self::OPERATION_DECRYPT);
     }
 
-    public function postLoad(LifecycleEventArgs $args)
+    public function postLoad(PostLoadEventArgs $args)
     {
-        $entity = $args->getEntity();
+        $entity = $args->getObject();
         $this->processFields($entity, self::OPERATION_DECRYPT);
     }
 
     public function preFlush(PreFlushEventArgs $args)
     {
-        $unitOfWork = $args->getEntityManager()->getUnitOfWork();
+        $unitOfWork = $args->getObjectManager()->getUnitOfWork();
         foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
             $this->processFields($entity, self::OPERATION_ENCRYPT);
         }
@@ -74,7 +70,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
 
     public function postFlush(PostFlushEventArgs $args)
     {
-        $unitOfWork = $args->getEntityManager()->getUnitOfWork();
+        $unitOfWork = $args->getObjectManager()->getUnitOfWork();
         foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
             $this->processFields($entity, self::OPERATION_DECRYPT);
         }
@@ -120,7 +116,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                                 $currentValue = $this->cryptoService->decrypt($encryptedPropValue);
                             }
                         } catch (DecryptException $e) {
-                            if ($onDecryptFail == 'false') {
+                            if ($onDecryptFail === 'false') {
                                 $currentValue = false;
                             } else {
                                 throw $e;
@@ -149,7 +145,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
                                 }
                             }
                         } catch (DecryptException $e) {
-                            if ($onDecryptFail == 'false') {
+                            if ($onDecryptFail === 'false') {
                                 $currentValue = false;
                             } else {
                                 throw $e;

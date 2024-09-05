@@ -8,20 +8,15 @@ class ClassUtils
 {
     /**
      * @param object $object
-     * @param \ReflectionClass|string $property
+     * @param \ReflectionProperty $property
      * @return mixed
      *
      * @throws \ReflectionException|\LogicException
      */
-    public static function getPropertyValue(object $object, \ReflectionClass|string $property): mixed
+    public static function getPropertyValue(object $object, \ReflectionProperty $property): mixed
     {
-        if ($property instanceof \ReflectionProperty) {
-            $refClass = $property->getDeclaringClass();
-            $refProperty = $property;
-        } else {
-            $refClass = new \ReflectionClass($object);
-            $refProperty = $refClass->getProperty($property);
-        }
+        $refClass = $property->getDeclaringClass();
+        $refProperty = $property;
 
         if (!$refClass->isInstance($object)) {
             throw new \LogicException(sprintf(
@@ -44,19 +39,14 @@ class ClassUtils
 
     /**
      * @param object $object
-     * @param \ReflectionClass|string $property
+     * @param \ReflectionProperty $property
      * @param mixed $value
      * @throws \ReflectionException
      */
-    public static function setPropertyValue(object $object, \ReflectionClass|string $property, mixed $value): void
+    public static function setPropertyValue(object $object, \ReflectionProperty $property, mixed $value): void
     {
-        if ($property instanceof \ReflectionProperty) {
-            $refClass = $property->getDeclaringClass();
-            $refProperty = $property;
-        } else {
-            $refClass = new \ReflectionClass($object);
-            $refProperty = $refClass->getProperty($property);
-        }
+        $refClass = $property->getDeclaringClass();
+        $refProperty = $property;
 
         if (!$refClass->isInstance($object)) {
             throw new \LogicException(sprintf(

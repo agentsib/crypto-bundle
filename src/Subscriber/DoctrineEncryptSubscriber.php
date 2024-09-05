@@ -17,10 +17,10 @@ use Doctrine\ORM\Events;
 
 class DoctrineEncryptSubscriber implements EventSubscriber
 {
-    const OPERATION_ENCRYPT = 'encrypt';
-    const OPERATION_DECRYPT = 'decrypt';
+    public const OPERATION_ENCRYPT = 'encrypt';
+    public const OPERATION_DECRYPT = 'decrypt';
 
-    const ENCRYPTED_ANNOTATION = 'AgentSIB\CryptoBundle\Annotation\Encrypted';
+    public const ENCRYPTED_ANNOTATION = 'AgentSIB\CryptoBundle\Annotation\Encrypted';
 
     private CryptoService $cryptoService;
     private AnnotationReader $annotationReader;

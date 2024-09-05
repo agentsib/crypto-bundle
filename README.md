@@ -14,28 +14,18 @@ This command requires you to have Composer installed globally, as explained
 in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
 of the Composer documentation.
 
-### Step 2: Enable the Bundle (Symfony 2/3)
+### Step 2: Enable the Bundle (Symfony 6)
 
 Then, enable the bundle by adding it to the list of registered bundles
-in the `app/AppKernel.php` file of your project:
+in the `config/bundles.php` file of your project:
 
 ```php
 <?php
-// app/AppKernel.php
+// config/bundles.php
 
-// ...
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-            new AgentSIB\CryptoBundle\AgentSIBCryptoBundle(),
-        );
-
-        // ...
-    }
-
+return [
     // ...
-}
+    AgentSIB\CryptoBundle\AgentSIBCryptoBundle::class => ['all' => true],
+    // ...
+];
 ```

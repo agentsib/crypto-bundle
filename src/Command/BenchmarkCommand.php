@@ -53,7 +53,7 @@ class BenchmarkCommand extends Command
             $this->cryptService->decrypt($data);
             $decryptTime += microtime(true) - $startTime;
 
-            if ($i % intval($count / 100) == 0) {
+            if ($i % (int)($count / 100) === 0) {
                 $progress->setProgress($i);
             }
         }

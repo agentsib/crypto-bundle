@@ -16,17 +16,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReencryptDataCommand extends Command
 {
-    private CryptoService $cryptService;
+    private CryptoService $cryptoService;
     private ManagerRegistry $registry;
-    private Reader $annotationReader;
 
     public function __construct(
-        CryptoService $cryptService,
+        CryptoService $cryptoService,
         ManagerRegistry $registry,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->cryptService = $cryptService;
+        $this->cryptoService = $cryptoService;
         $this->registry = $registry;
     }
 
@@ -84,7 +83,7 @@ class ReencryptDataCommand extends Command
                         continue; // TODO More complex
                     }
 
-                    $encValue = $this->cryptService->encrypt($curValue);
+                    $encValue = $this->cryptoService->encrypt($curValue);
                     ClassUtils::setPropertyValue($entity, $refEncryptProperty, $encValue);
                 }
                 $em->flush($entity);

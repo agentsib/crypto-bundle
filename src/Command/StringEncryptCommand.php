@@ -10,12 +10,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StringEncryptCommand extends Command
 {
-    protected CryptoService $cryptService;
+    protected CryptoService $cryptoService;
 
-    public function __construct(CryptoService $cryptService, string $name = null)
+    public function __construct(CryptoService $cryptoService, string $name = null)
     {
         parent::__construct($name);
-        $this->cryptService = $cryptService;
+        $this->cryptoService = $cryptoService;
     }
 
     protected function configure(): void
@@ -30,7 +30,7 @@ class StringEncryptCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(
-            $this->cryptService->encrypt(
+            $this->cryptoService->encrypt(
                 $input->getArgument('plainString')
             )
         );

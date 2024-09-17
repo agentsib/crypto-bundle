@@ -2,11 +2,9 @@
 
 namespace AgentSIB\CryptoBundle\Command;
 
-use AgentSIB\CryptoBundle\Annotation\Encrypted;
-use AgentSIB\CryptoBundle\EventListeners\DoctrineEncryptListener;
+use AgentSIB\CryptoBundle\Attribute\Encrypted;
 use AgentSIB\CryptoBundle\Service\CryptoService;
 use AgentSIB\CryptoBundle\Utils\ClassUtils;
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,13 +23,11 @@ class ReencryptDataCommand extends Command
     public function __construct(
         CryptoService $cryptService,
         ManagerRegistry $registry,
-        Reader $annotationReader,
         string $name = null
     ) {
         parent::__construct($name);
         $this->cryptService = $cryptService;
         $this->registry = $registry;
-        $this->annotationReader = $annotationReader;
     }
 
     protected function configure(): void
@@ -113,21 +109,26 @@ class ReencryptDataCommand extends Command
      * @param $entityMetaData
      * @return \ReflectionProperty[]
      */
-    protected function getEncryptionableProperties($entityMetaData)
+    protected function getEncryptionableProperties($entityMetaData): array
     {
-        //Create reflectionClass for each meta data object
-        $reflectionClass = New \ReflectionClass($entityMetaData->name);
+        //Create reflectionClass for each metadata object
+        $reflectionClass = new \ReflectionClass($entityMetaData->name);
         $propertyArray = $reflectionClass->getProperties();
-        $properties    = [];
+        $properties = [];
+
         foreach ($propertyArray as $property) {
-            /** @var Encrypted $annotation */
-            if ($annotation = $this->annotationReader->getPropertyAnnotation(
-                $property,
-                DoctrineEncryptListener::ENCRYPTED_ANNOTATION
-            )) {
-                $properties[$property->getName()] = $annotation->decryptedProperty;
+            $attributes = $property->getAttributes(Encrypted::class);
+            $encAttribute = null;
+
+            if (!empty($attributes)) {
+                $encAttribute = $attributes[0]->newInstance();
+            }
+
+            if ($encAttribute instanceof Encrypted) {
+                $properties[$property->getName()] = $encAttribute->decryptedProperty;
             }
         }
+
         return $properties;
     }
 }

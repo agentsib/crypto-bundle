@@ -15,7 +15,6 @@
 
         <service id="agentsib_crypto.doctrine.subscriber" class="AgentSIB\CryptoBundle\EventListeners\DoctrineEncryptListener">
             <argument type="service" id="agentsib_crypto.crypto_service" />
-            <argument type="service" id="annotations.reader" />
             <tag name="doctrine.event_listener" event="preUpdate" />
             <tag name="doctrine.event_listener" event="postUpdate" />
             <tag name="doctrine.event_listener" event="postLoad" />

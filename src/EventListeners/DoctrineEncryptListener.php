@@ -2,32 +2,28 @@
 
 namespace AgentSIB\CryptoBundle\EventListeners;
 
-use AgentSIB\CryptoBundle\Annotation\Encrypted;
+use AgentSIB\CryptoBundle\Attribute\Encrypted;
 use AgentSIB\CryptoBundle\Model\Exception\DecryptException;
 use AgentSIB\CryptoBundle\Service\CryptoService;
 use AgentSIB\CryptoBundle\Utils\ClassUtils;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Mapping\Embedded;
 
 class DoctrineEncryptListener
 {
     public const OPERATION_ENCRYPT = 'encrypt';
     public const OPERATION_DECRYPT = 'decrypt';
 
-    public const ENCRYPTED_ANNOTATION = 'AgentSIB\CryptoBundle\Annotation\Encrypted';
-
     private CryptoService $cryptoService;
-    private AnnotationReader $annotationReader;
 
-    public function __construct(CryptoService $cryptoService, AnnotationReader $annotationReader)
+    public function __construct(CryptoService $cryptoService)
     {
         $this->cryptoService = $cryptoService;
-        $this->annotationReader = $annotationReader;
     }
 
     public function getSubscribedEvents()
@@ -83,18 +79,30 @@ class DoctrineEncryptListener
         $properties = $this->getClassProperties($reflectionClass);
 
         foreach ($properties as $refProperty) {
-            if ($this->annotationReader->getPropertyAnnotation($refProperty, 'Doctrine\ORM\Mapping\Embedded')) {
-                $this->handleEmbeddedAnnotation($entity, $refProperty, $operation);
+            $attributes = $refProperty->getAttributes(Embedded::class);
+            $embeddedAttribute = null;
+
+            if (!empty($attributes)) {
+                $embeddedAttribute = $attributes[0]->newInstance();
+            }
+
+            if ($embeddedAttribute) {
+                $this->handleEmbeddedAttribute($entity, $refProperty, $operation);
                 continue;
             }
 
-            /** @var \ReflectionProperty $refProperty */
-            if ($annotation = $this->annotationReader->getPropertyAnnotation($refProperty, self::ENCRYPTED_ANNOTATION)) {
-                /** @var Encrypted $annotation */
-                $decryptedPropName = $annotation->decryptedProperty;
-                $nullable = $annotation->nullable;
-                $allowDecrypted = $annotation->allowDecrypted;
-                $onDecryptFail = $annotation->onDecryptFail;
+            $attributes = $refProperty->getAttributes(Encrypted::class);
+            $encAttribute = null;
+
+            if (!empty($attributes)) {
+                $encAttribute = $attributes[0]->newInstance();
+            }
+
+            if ($encAttribute instanceof Encrypted) {
+                $decryptedPropName = $encAttribute->decryptedProperty;
+                $nullable = $encAttribute->nullable;
+                $allowDecrypted = $encAttribute->allowDecrypted;
+                $onDecryptFail = $encAttribute->onDecryptFail;
 
                 if (!$refProperty->getDeclaringClass()->hasProperty($decryptedPropName)) {
                     throw new \Exception('Property %s not exists for class %s', $decryptedPropName, $refProperty->getDeclaringClass()->getNamespaceName());
@@ -157,12 +165,14 @@ class DoctrineEncryptListener
         }
     }
 
-    private function handleEmbeddedAnnotation(object $entity, \ReflectionProperty $embeddedProperty, string $operation): void
+    private function handleEmbeddedAttribute(object $entity, \ReflectionProperty $embeddedProperty, string $operation): void
     {
         $realClass = ClassUtils::getEntityClass($entity);
         $reflectionClass = new \ReflectionClass($realClass);
         $propName = $embeddedProperty->getName();
         $methodName = ucfirst($propName);
+        $embeddedEntity = null;
+
         if ($embeddedProperty->isPublic()) {
             $embeddedEntity = $embeddedProperty->getValue();
         } else {

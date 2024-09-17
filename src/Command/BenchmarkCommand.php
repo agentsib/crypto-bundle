@@ -11,12 +11,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BenchmarkCommand extends Command
 {
-    protected CryptoService $cryptService;
+    protected CryptoService $cryptoService;
 
-    public function __construct(CryptoService $cryptService, string $name = null)
+    public function __construct(CryptoService $cryptoService, string $name = null)
     {
         parent::__construct($name);
-        $this->cryptService = $cryptService;
+        $this->cryptoService = $cryptoService;
     }
 
     protected function configure(): void
@@ -46,11 +46,11 @@ class BenchmarkCommand extends Command
             $bytes = openssl_random_pseudo_bytes($length);
 
             $startTime = microtime(true);
-            $data = $this->cryptService->encrypt($bytes);
+            $data = $this->cryptoService->encrypt($bytes);
             $encryptTime += microtime(true) - $startTime;
 
             $startTime = microtime(true);
-            $this->cryptService->decrypt($data);
+            $this->cryptoService->decrypt($data);
             $decryptTime += microtime(true) - $startTime;
 
             if ($i % (int)($count / 100) === 0) {
